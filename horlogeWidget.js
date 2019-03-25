@@ -1,22 +1,84 @@
-//class hologeWidget extends Widget
-	//constructor Model,View,Controller
+class horloge extends Widget {
+	
+	constructor(app) {
+		super(horlogeModel, horlogeView, horlogeController, app);
+	}
+	
+	setUp() {
+		super.setUp();
+		//this.header = true;
+		//this.footer = true;
+	}
+	
+	ready() {
+		super.ready();
+		
+	}
+	
+}
 
-	//seUup
-		//header
-		//footer
+class horlogeModel extends WidgetModel {
+	
+	constructor() {
+		super();
+	}
+	
+	timeZone(ville) {
+		// trouve à quel fuseau horaire appartient la ville entrée
+		// Conversion en nombre pour que l'on puisse utiliser l'heure 
+	}
+	
+}
 
-	//ready
+class horlogeView extends WidgetView {
+	
+	constructor() {
+		super();
+	}
 
-//class hologeModel extends WidgetModel
+	draw() {
+		super.draw();
+		
+		//créer un canvas qui prendra toute la taille du widget
+		// Faire un cercle dans le canvas
 
-	//constructor() super
+		function changeHours(h)
+		{
+			// Calcul d'angle (360/12) à partir de l'heure récupérée
+		}
 
-	// horloge()
+		function changeMinutes(min)
+		{
+			// Calcul d'angle (360/60) à partir des minutes
+		}
 
-//class horlogeView extends WidgetView
-	//constructor() super
+		function radians(degrees)
+		{
+			// Convertit les degrés entrée en radian
+		}
 
-	//draw()
+		function toVec(radians)
+		{
+			// le cosinus et le sinus
+		}
 
-//class horlogeController extends WidgetController
-	//constructor() super
+		function needle(vec,length)
+		{
+			// On va dessiner les aiguilles
+		}
+
+	}
+	
+}
+
+class horlogeController extends WidgetController {
+	
+	constructor() {
+		super();
+	}
+	
+	update() {
+		// rafraichira le widget toutes les 1000 millisecondes
+	}
+	
+}
