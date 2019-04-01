@@ -1,7 +1,7 @@
-class LeMondeWidget extends Widget {
+class horlogeWidget extends Widget {
 	
-	constructor(id, app) {
-		super(id, LeMondeModel, LeMondeView, LeMondeController, app);
+	constructor(id,app) {
+		super(id,horlogeModel, horlogeView, horlogeController, app);
 	}
 	
 	setUp() {
@@ -9,156 +9,131 @@ class LeMondeWidget extends Widget {
 		this.header = true;
 		this.footer = false;
 		this.sizeX = 2;
-		this.sizeY = 0.5;
-		this.radius = 10;
+		this.sizeY = 2;
+		this.radius = 15;
 	}
 	
-	async ready() {
+	ready() {
 		super.ready();
 		
-		this.controller.load();
 	}
 	
 }
 
-class LeMondeModel extends WidgetModel {
+class horlogeModel extends WidgetModel {
 	
 	constructor() {
 		super();
 	}
 	
-	setUp() {
-		super.setUp();
-		
-	}
-
 }
 
-class LeMondeView extends WidgetView {
+class horlogeView extends WidgetView {
 	
 	constructor() {
 		super();
-	}
-	
-	setUp() {
-		super.setUp();
-		
 	}
 
 	draw() {
 		super.draw();
-		this.link = HH.create("a");
-		SS.style(this.link, {"fontSize": "10px", "textDecoration": "none"});
-		this.stage.appendChild(this.link);
-	}
-	
-	update(title, link) {
-		this.link.innerHTML = title;
-		HH.attr(this.link, {"href": "https://www.lemonde.fr" + link, "target": "_blank"});
+
+		this.try.input = document.createElement("input");
+
+		
+		let toDraw = document.createElement("canvas");
+		toDraw.width = 150 * this.try.mvc.main.sizeX;
+		toDraw.height = 150 * this.try.mvc.main.sizeY - 25;
+		this.try.stage.appendChild(toDraw);
+
+		let clock = toDraw.getContext('2d');
+
+
+		function changeHours(h)
+		{
+			return (360/12) * h - 90; // Calcul d'angle (360/12) à partir de l'heure récupérée
+
+		}
+
+		function changeMinutes(min)
+		{
+			// Calcul d'angle (360/60) à partir des minutes
+			return (360/60) * min - 90;
+		}
+
+		function radians(degrees)
+		{
+			// Convertit les degrés entrée en radian
+			return degrees * Math.PI / 180;
+		}
+
+		function toVec(radians)
+		{
+			// le cosinus et le sinus
+			return [
+			Math.cos(radians),
+			Math.sin(radians)
+			];
+
+		}
+
+		function needle(vec,length)
+		{
+			// On va dessiner les aiguilles
+			vec[0] *= length;
+			vec[1] *= length;
+
+			clock.moveTo(toDraw.width/2, toDraw.height/2);
+			clock.lineTo(vec[0] + toDraw.width/2,vec[1] + toDraw.height/2);
+		}
+
+		function drawAClock()
+		{
+		
+			clock.clearRect(0, 0, toDraw.width, toDraw.height);
+			clock.beginPath(); 
+			clock.arc(toDraw.width/2, toDraw.height/2, toDraw.height/2, 0, 2 * Math.PI);
+
+			clock.stroke();
+			let time = new Date();
+			let hours = time.getHours(); 
+			let minutes = time.getMinutes();
+			let seconds = time.getSeconds();
+
+			clock.restore();
+			clock.beginPath(); 
+		
+
+			needle(toVec(radians(changeMinutes(minutes))), toDraw.width/2.5);
+			needle(toVec(radians(changeHours(hours))), toDraw.width/5);
+			needle(toVec(radians(changeMinutes(seconds))), toDraw.width/2.5);
+
+			clock.stroke();
+		}
+
+		function update()
+		{
+			var intervalID = window.setInterval(drawAClock, 1000);	
+		}
+
+		drawAClock();
+		update();
+
 	}
 	
 }
 
-class LeMondeController extends WidgetController {
+class horlogeController extends WidgetController {
 	
 	constructor() {
 		super();
 	}
-	
-	setUp() {
-		super.setUp();
-		
-	}
-	
-async load() { //recup sur une page
-		let result = await this.mvc.main.dom("https://lemonde.fr"); // load web page  
-		let domstr = _atob(result.response.dom); // decode result
-		let parser = new DOMParser(); // init dom parser
-		let dom = parser.parseFromString(domstr, "text/html"); // inject result
-		let article = new xph().ctx(dom).craft('//*[@id="en-continu"]/div/ul/li[1]/a').firstResult; // find interesting things
-		this.mvc.view.update(article.textContent, article.getAttribute("href")); // afiche le titre et le lien dans le view
-	}
-	
-}
-class LeMondeWidget extends Widget {
-	
-	constructor(id, app) {
-		super(id, LeMondeModel, LeMondeView, LeMondeController, app);
-	}
-	
-	setUp() {
-		super.setUp();
-		this.header = true;
-		this.footer = false;
-		this.sizeX = 2;
-		this.sizeY = 0.5;
-		this.radius = 10;
-	}
-	
-	async ready() {
-		super.ready();
-		
-		this.controller.load();
-	}
-	
-}
 
-class LeMondeModel extends WidgetModel {
-	
-	constructor() {
-		super();
-	}
-	
-	setUp() {
-		super.setUp();
-		
+	async refreshDate()
+	{
+		let ville = this.try.mvc.view.input.value;
+		let result = await this.mvc.main.dom("https://maps.googleapis.com/maps/api/geocode/json?address="
+										 + ville + "%20CA&sensor=false&key=AIzaSyBx-n626fUnoG-w26khNIiCF7J4lkSe5xE");
+		/// faire requête à google maps avec la ville
 	}
 
-}
-
-class LeMondeView extends WidgetView {
-	
-	constructor() {
-		super();
-	}
-	
-	setUp() {
-		super.setUp();
-		
-	}
-
-	draw() {
-		super.draw();
-		this.link = HH.create("a");
-		SS.style(this.link, {"fontSize": "10px", "textDecoration": "none"});
-		this.stage.appendChild(this.link);
-	}
-	
-	update(title, link) {
-		this.link.innerHTML = title;
-		HH.attr(this.link, {"href": "https://www.lemonde.fr" + link, "target": "_blank"});
-	}
-	
-}
-
-class LeMondeController extends WidgetController {
-	
-	constructor() {
-		super();
-	}
-	
-	setUp() {
-		super.setUp();
-		
-	}
-	
-async load() { //recup sur une page
-		let result = await this.mvc.main.dom("https://lemonde.fr"); // load web page  
-		let domstr = _atob(result.response.dom); // decode result
-		let parser = new DOMParser(); // init dom parser
-		let dom = parser.parseFromString(domstr, "text/html"); // inject result
-		let article = new xph().ctx(dom).craft('//*[@id="en-continu"]/div/ul/li[1]/a').firstResult; // find interesting things
-		this.mvc.view.update(article.textContent, article.getAttribute("href")); // afiche le titre et le lien dans le view
-	}
-	
 }
