@@ -131,9 +131,12 @@ class horlogeController extends WidgetController {
 	async refreshDate()
 	{
 		let ville = this.try.mvc.view.input.value;
-		let result = await this.mvc.main.dom("https://maps.googleapis.com/maps/api/geocode/json?address="
-										 + ville + "%20CA&sensor=false&key=AIzaSyBx-n626fUnoG-w26khNIiCF7J4lkSe5xE");
+		let result = await this.mvc.main.dom("https://maps.googleapis.com/maps/api/geocode/json?address=San%20Francisco,%20CA&sensor=false&key=AIzaSyCsyqpek1aix-THp5VZSUDBhAf9AoaeT7M");
+		console.log(result);
 		/// faire requête à google maps avec la ville
 	}
 
 }
+
+
+
