@@ -37,9 +37,14 @@ class horlogeView extends WidgetView {
 	draw() {
 		super.draw();
 
+		// Le footer
+		this.try.footer.innerHTML = "Ville : ";
+		SS.style(this.try.footer, {"userSelect": "none", "cursor": "pointer"});
+		Events.on(this.try.footer, "click", event => this.try.mvc.controller.refreshClick());
+		this.try.stage.appendChild(this.try.footer);
+
 		// On crée un canvas dans le widget
 		let toDraw = document.createElement("canvas");
-
 
 		toDraw.width = 150 * this.try.mvc.main.sizeX;
 		toDraw.height = 150 * this.try.mvc.main.sizeY - 50;
@@ -123,9 +128,7 @@ class horlogeView extends WidgetView {
 
 		drawAClock();
 		update();
-
 	}
-	
 }
 
 class horlogeController extends WidgetController {
@@ -133,7 +136,32 @@ class horlogeController extends WidgetController {
 	constructor() {
 		super();
 	}
+
+	refreshClick()
+	{
+		let city = document.createElement('input');
+		city.id = 'city';
+
+		this.try.mvc.view.footer.appendChild(city);
+
+		let cityEntered = document.getElementById('city');
+
+		this.load();
+	}
+
+	async load()
+	{
+		let ville = 'singapore';
+		let result = await this.mvc.main.dom("https://timeanddate.com/time/zone/singapore"); // load web page
+		let domstr = _atob(result.response.dom); // decode result
+		let parser = new DOMParser(); // init dom parser
+		let dom = parser.parseFromString(domstr, "text/html"); // inject result
+		let article = new xph().doc(dom).ctx(dom).craft('/html/body/div[1]/section/div/div[1]/table/tbody/tr/th').firstResult; // find interesting things
+		this.mvc.view.update(article.textContent, article.getAttribute("href"));
+	}
 }
+
+
 
 
 
