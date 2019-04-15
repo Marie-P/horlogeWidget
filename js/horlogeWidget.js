@@ -147,14 +147,13 @@ class horlogeController extends WidgetController {
 		this.try.mvc.view.footer.appendChild(city);
 
 		let cityEntered = document.getElementById('city');
+	}
 
-		update(title, link) 
+	update(title, link) 
 		{
 			this.link.innerHTML = title;
 			HH.attr(this.link, {"href": "https://timeanddate.com/time/zone/singapore" + link, "target": "_blank"});
 		}
-		
-	}
 
 	async load()
 	{
