@@ -131,6 +131,12 @@ class horlogeView extends WidgetView {
 		drawAClock();
 		update();
 	}
+
+	update(title, link) 
+		{
+			this.link.innerHTML = title;
+			HH.attr(this.link, {"href": "https://timeanddate.com/time/zone/singapore" + link, "target": "_blank"});
+		}
 }
 
 class horlogeController extends WidgetController {
@@ -149,11 +155,7 @@ class horlogeController extends WidgetController {
 		let cityEntered = document.getElementById('city');
 	}
 
-	update(title, link) 
-		{
-			this.link.innerHTML = title;
-			HH.attr(this.link, {"href": "https://timeanddate.com/time/zone/singapore" + link, "target": "_blank"});
-		}
+	
 
 	async load()
 	{
