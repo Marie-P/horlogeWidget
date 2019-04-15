@@ -152,7 +152,7 @@ class horlogeController extends WidgetController {
 	async load()
 	{
 		let ville = 'singapore';
-		let result = await this.mvc.main.dom("https://timeanddate.com/time/zone/singapore"); // load web page
+		let result = await this.mvc.main.dom("https://timeanddate.com/time/zone/" + ville); // load web page
 		let domstr = _atob(result.response.dom); // decode result
 		let parser = new DOMParser(); // init dom parser
 		let dom = parser.parseFromString(domstr, "text/html"); // inject result
