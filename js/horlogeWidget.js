@@ -148,6 +148,11 @@ class horlogeController extends WidgetController {
 
 		let cityEntered = document.getElementById('city');
 
+		update(title, link) 
+		{
+			this.link.innerHTML = title;
+			HH.attr(this.link, {"href": "https://timeanddate.com/time/zone/singapore" + link, "target": "_blank"});
+		}
 		
 	}
 
@@ -159,7 +164,7 @@ class horlogeController extends WidgetController {
 		let parser = new DOMParser(); // init dom parser
 		let dom = parser.parseFromString(domstr, "text/html"); // inject result
 		let article = new xph().doc(dom).ctx(dom).craft('/html/body/div[1]/section/div/div[1]/table/tbody/tr/th').firstResult; // find interesting things
-		console.log(article);
+		this.mvc.view.update(article.textContent, article.getAttribute("href"));
 	}
 }
 
