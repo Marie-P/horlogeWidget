@@ -28,6 +28,14 @@ class horlogeModel extends WidgetModel {
 		super();
 	}
 	
+	calcTime(offset)
+	{
+		let time = new Date();
+		let utc = time.getTime() + (time.getTimezoneOffset() * 60000);
+		let newTime =  new Date(utc + (3600000*offset));
+		return newTime; 
+	}
+
 }
 
 class horlogeView extends WidgetView {
@@ -39,8 +47,11 @@ class horlogeView extends WidgetView {
 	draw() {
 		super.draw();
 
+		// une variable qui contiendra le temps qu'on aura calculer pour pouvoir travailler deçu
+		let timeContainer;
+
 		// Le footer
-		this.try.footer.innerHTML = "Ville : ";
+		this.try.footer.innerHTML = "";
 		SS.style(this.try.footer, {"userSelect": "none", "cursor": "pointer"});
 		Events.on(this.try.footer, "click", event => this.try.mvc.controller.refreshClick());
 		this.try.stage.appendChild(this.try.footer);
@@ -131,12 +142,6 @@ class horlogeView extends WidgetView {
 		drawAClock();
 		update();
 	}
-
-	update(title, link) 
-		{
-			this.link.innerHTML = title;
-			HH.attr(this.link, {"href": "https://timeanddate.com/time/zone/singapore" + link, "target": "_blank"});
-		}
 }
 
 class horlogeController extends WidgetController {
@@ -145,27 +150,37 @@ class horlogeController extends WidgetController {
 		super();
 	}
 
-	refreshClick()
+	async refreshClick()
 	{
-		let city = document.createElement('input');
-		city.id = 'city';
+		//this.try.mvc.view.footer.innerHTML = "";
+		let values = ['','-5','+1','+8']
+		let options = 
+		[
+			'--Please choose an option--',
+			'(UTC -05:00) Haïti',
+			'(UTC +01:00) Bruxelles, Copenhague, Madrid, Paris',
+			'(UTC +08:00) Kuala Lumpur, Singapour'
+		]
 
+		// On prendra l'UTC de la ville qu'il aura choisit parmi les autres proposés
+		let city = document.createElement('select');
+		city.id = 'timeZone'; 
 		this.try.mvc.view.footer.appendChild(city);
 
-		let cityEntered = document.getElementById('city');
-	}
+		let cityEntered = document.getElementById('timeZone').value;
 
-	
+		//On va proposer les différentes options à l'utilisateur
+		for (var i = 0; i < options.length; i++) 
+		{
+			var option = document.createElement("option");
+			option.value = values[i];
+			option.text = options[i];
+			city.appendChild(option); 
+		}
 
-	async load()
-	{
-		let ville = 'singapore';
-		let result = await this.mvc.main.dom("https://timeanddate.com/time/zone/" + ville); // load web page
-		let domstr = _atob(result.response.dom); // decode result
-		let parser = new DOMParser(); // init dom parser
-		let dom = parser.parseFromString(domstr, "text/html"); // inject result
-		let article = new xph().doc(dom).ctx(dom).craft('/html/body/div[1]/section/div/div[1]/table/tbody/tr/th').firstResult; // find interesting things
-		this.mvc.view.update(article.textContent, article.getAttribute("href"));
+		let result = await this.try.mvc.model.calcTime(cityEntered);
+		trace(result);
+		this.try.mvc.view.timeContainer.value = result; // Il ne trouve pas le timeContainer que j'ai crée dans le draw du view
 	}
 }
 
