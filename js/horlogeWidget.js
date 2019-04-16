@@ -15,8 +15,6 @@ class horlogeWidget extends Widget {
 	
 	ready() {
 		super.ready();
-
-		this.controller.load();
 		
 	}
 	
