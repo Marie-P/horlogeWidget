@@ -15,7 +15,6 @@ class horlogeWidget extends Widget {
 	
 	ready() {
 		super.ready();
-		
 	}
 	
 }
@@ -42,14 +41,45 @@ class horlogeView extends WidgetView {
 		this.try.stage.appendChild(this.try.footer);
 
 		// Les UTC
-		let values = ['','-4','+1','+2','+8'] 
+		let values = ['','-12','-11','-10','-9.5','-9','-8','-7','-6','-5','-4','-3','-2','-1','0','+1','+2','+3','+4','+5','+5.5','+5.75','+6','+6.5','+7','+8','+8.75','+9','+9.5','+10','+10.5','+11','+12','+12.75','+13','+14'] 
 		let options = 
 		[
 			'--Please choose an option--',
-			'(UTC -04:00) Haïti',
-			'(UTC +01:00) Douala, Londres',
+			'(UTC -12:00) Ligne de date internationale (Ouest)',
+			'(UTC -11:00) Temps universel coordonnée -11',
+			'(UTC -10:00) Hawaï',
+			'(UTC -09:30) Îles Marquises, Polynésie française',
+			'(UTC -09:00) Temps universel coordonnée -09',
+			'(UTC -08:00) Alaska, Etats-Unis',
+			'(UTC -07:00) Phoenix, Arizona',
+			'(UTC -06:00) Île de pâques',
+			'(UTC -05:00) Guadalajara, Mexique',
+			'(UTC -04:00) Haïti, La Havane, Cuba',
+			'(UTC -03:00) Brasilia, Brésil',
+			'(UTC -02:00) Groenland',
+			'(UTC -01:00) Cap-vert',
+			'(UTC 00:00) Açores',
+			'(UTC +01:00) Douala, Londres, Irlande',
 			'(UTC +02:00) Bruxelles, Madrid, Paris',
-			'(UTC +08:00) Kuala Lumpur, Singapour'
+			'(UTC +03:00) Beyrouth, Liban',
+			'(UTC +04:00) Abou Dabi, Russie',
+			'(UTC +05:00) Achgabat, Turkménistan',
+			'(UTC +05:30) Bombay, Maharashtra, Inde',
+			'(UTC +05:45) Katmandou, Népal',
+			'(UTC +06:00) Dacca, Bangladesh',
+			'(UTC +06:30) Rangoun, Birmanie',
+			'(UTC +07:00) Bangkok, Thaïlande, Vietnam',
+			'(UTC +08:00) Kuala Lumpur, Singapour',
+			'(UTC +08:45) Eucla Australie-Occidentale',
+			'(UTC +09:00) Tokyo, Séoul, Corée du Sud',
+			'(UTC +09:30) Darwin',
+			'(UTC +10:00) Brisbane, Australie',
+			'(UTC +10:30) Île Lord Howe',
+			'(UTC +11:00) Nouvelle-Calédonie',
+			'(UTC +12:00) Fidji',
+			'(UTC +12:45) Îles Chatham',
+			'(UTC +13:00) Nuku alofa, Tonga',
+			'(UTC +14:00) Kiritimati'
 		]
 
 		// Sélection de l'UTC par l'utilisateur
